@@ -126,11 +126,15 @@ class Current_Weather(tk.Tk):
 
         self.clock_label = tk.Label(self, text="9:30 pm", font=("serif", 30, 'bold'), fg="black", bg="white")
         self.clock_label.place(x=35, y=390)
-    '''
-    def create_bottom_frame(self):
-        self.bottom_frame = Frame(self, width=800, height=100, bg="#212120")
-        self.bottom_frame.pack(side=BOTTOM, fill=X)
-    '''
+    
+    def update_weather_image(self, image_path):
+        pil_image = Image.open(image_path)
+        new_size = (200, 200)
+        resized_image = pil_image.resize(new_size, Image.LANCZOS)
+        weather_image = ImageTk.PhotoImage(resized_image)
+        self.weather_image_label.config(image=weather_image)
+        self.weather_image_label.image = weather_image
+
     def update_data(self):
         loc = self.get_location(self.city_entry.get())
         if loc:
@@ -147,40 +151,39 @@ class Current_Weather(tk.Tk):
             self.weather_data["Humidity"] = data['current']['humidity'] if data else "N/A"
             self.weather_data["Pressure"] = data['current']['pressure_mb'] if data else "N/A"
             self.weather_data["Wind Speed"] = data['current']['wind_kph'] if data else "N/A"
-            self.weather_data["Description"] = data['current']["condition"]['text'] if data else "N/A"
+            self.weather_data["Description"] = data['current']['condition']['text'] if data else "N/A"
 
-            self.aqi_data['PM2.5'] = data['current']['air_quality']['pm2_5'] if data else "N/A"
-            self.aqi_data['PM10'] = data['current']['air_quality']['pm10'] if data else "N/A"
-            self.aqi_data['Ozone'] = data['current']['air_quality']['o3'] if data else "N/A"
-            self.aqi_data['CO'] = data['current']['air_quality']['co'] if data else "N/A"
-            self.aqi_data['sulphur'] = data['current']['air_quality']['so2'] if data else "N/A"
-
+            if data:
+                aqi = data['current']['air_quality']
+                self.aqi_data["PM2.5"] = f"{aqi['pm2_5']:.2f}"
+                self.aqi_data["PM10"] = f"{aqi['pm10']:.2f}"
+                self.aqi_data["Ozone"] = f"{aqi['o3']:.2f}"
+                self.aqi_data["CO"] = f"{aqi['co']:.2f}"
+                self.aqi_data["sulphur"] = f"{aqi['so2']:.2f}"
+                
             self.update_labels()
-            self.update_time(loc.latitude, loc.longitude)
-        else:
-            print("Error: city not found")
+            self.update_time(loc.latitude, loc.longitude)  # type: ignore
 
-    def get_location(self, city: str):
-        geolocator = Nominatim(user_agent="WeatherApp")
-        return geolocator.geocode(city)
+    def get_location(self, place):
+        geolocator = Nominatim(user_agent="GetLoc")
+        location = geolocator.geocode(place)
+        return location
 
-    def fetch_data(self, apiUrl: str, payload: dict) -> dict | None:
+    def fetch_data(self, api, payload):
         try:
-            response = requests.get(apiUrl, params=payload)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            else:
-                raise Exception("Requested rejected with error code (500).")
-        except Exception as e:
-            print(f"Error fetching data: {e}")
+            response = requests.get(api, params=payload)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            messagebox.showerror("Error", f"Failed to fetch data: {e}")
             return None
 
     def update_labels(self):
         for key, label in self.weather_labels.items():
-            label.config(text=f"{key}: {self.weather_data[key]}")
-
+            label.config(text=f"{key}: {self.weather_data.get(key, 'N/A')}")
+        
         for key, label in self.aqi_labels.items():
-            label.config(text=f"{key}: {self.aqi_data[key]}")
+            label.config(text=f"{key}: {self.aqi_data.get(key, 'N/A')}")
 
     def update_time(self, lat, lon):
         tf = TimezoneFinder()
@@ -190,12 +193,38 @@ class Current_Weather(tk.Tk):
             local_time = datetime.now(timezone)
             self.clock_label.config(text=local_time.strftime("%I:%M %p"))
 
+            # Determine if it's day or night and update the image
+            current_hour = local_time.hour
+            if 6 <= current_hour < 18:
+                self.update_weather_image("pic/day.jpeg")
+                day_bg_color = "#F29F05"
+                day_fg_color = "white"
+                aqi_bg_color = "#595959"  # Constant for AQI section
+                aqi_fg_color = "white"  # Constant for AQI section
+                weather_icon_bg_color = "#F29F05"  # 
+            else:
+                self.update_weather_image("pic/night.png")
+                day_bg_color = "purple"  # Keep constant for night image
+                day_fg_color = "white"  # Keep constant for night image
+                aqi_bg_color = "#595959"  # Constant for AQI section
+                aqi_fg_color = "white"  # Constant for AQI section
+                weather_icon_bg_color = "purple"  # Keep constant for night image
+
+            # Update background and foreground colors for weather labels
+            for label in self.weather_labels.values():
+                label.config(bg=day_bg_color, fg=day_fg_color)
+            
+            # Update background and foreground colors for AQI labels
+            for label in self.aqi_labels.values():
+                label.config(bg=aqi_bg_color, fg=aqi_fg_color)
+
+            # Update background color for weather icon
+            self.weather_icon_label.config(bg=weather_icon_bg_color)
+
+
+
 if __name__ == "__main__":
     app = Current_Weather()
-    app.title("Weather Analyzer App")
-    app.configure(bg="#3776ab")
-    app.geometry("800x800")
-    app.resizable(False, False)
-    app.protocol("WM_DELETE_WINDOW", app.quit())
-    app.after_idle(app.update_data)
+    app.title("Current Weather and Air Quality")
+    app.geometry("800x600")
     app.mainloop()
