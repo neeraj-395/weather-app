@@ -142,6 +142,8 @@ class Current_Weather(tk.Tk):
             avg_temp.append(float(day_data['day']['avgtemp_c'])) 
         
         temperature_graph(dates, days, max_temp, min_temp, avg_temp)
+    def aplot(self) -> None:
+        pass
     
     def day_or_night(self, icon, bg_img, bg: str) -> None:
         self.weather_bg_label.config(image=bg_img)
