@@ -60,3 +60,6 @@ def temperature_graph(dates: List[str], days: range, max_temp: List[float], min_
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+def aqi_graphs():
+    pass
