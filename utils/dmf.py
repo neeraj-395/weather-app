@@ -11,7 +11,7 @@ def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict | 
     the parsed JSON data. If the content type is not JSON, it returns None. In case
     of a request exception, an error message is displayed and None is returned.
 
-    Example:
+    ## Example:
         >>> api_url = "https://api.example.com/data"
         >>> params = {"param1": "value1", "param2": "value2"}
         >>> data = fetch_data(api_url, params)
@@ -20,7 +20,7 @@ def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict | 
         >>> else:
         >>>     print("Failed to fetch data or data is not in JSON format.")
 
-    Note:
+    ## Note:
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """

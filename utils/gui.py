@@ -12,7 +12,7 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
     dictionary for label styling. It returns dictionaries containing the 
     created parameter and value labels.
 
-    Args:
+    ## Args:
     - parent (Any): The parent widget in which the labels will be created.
     - key_pairs (Dict[str, str]): A dictionary where the keys are destination 
       label texts and the values are source label texts.
@@ -20,12 +20,12 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
       for each label. The keys should correspond to destination label texts or 'FOR_ALL' 
       for default styling.
 
-    Returns:
+    ## Returns:
     Tuple[Dict, Dict]: Two dictionaries:
     - param_label: A dictionary of created parameter labels.
     - value_label: A dictionary of created value labels.
 
-    Example:
+    ## Example:
         >>> import tkinter as tk
         >>> root = tk.Tk()
         >>> key_pairs = {"Temperature": "temp", "Humidity": "hum"}
@@ -33,7 +33,7 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
         >>> param_labels, value_labels = create_labels(root, key_pairs, config)
         >>> root.mainloop()
 
-    Note:
+    ## Note:
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """
@@ -78,7 +78,8 @@ def create_card(file: Any, size: Optional[Tuple[int,int]] = None, corner_radius:
         >>> root.mainloop()
 
     Note:
-    This function documentation was generated with the assistance of ChatGPT, an AI language model developed by OpenAI.
+    This function documentation was generated with the assistance of ChatGPT, 
+    an AI language model developed by OpenAI.
     """
 
     # Open the image file
