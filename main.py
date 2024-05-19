@@ -15,8 +15,8 @@ WEATHER_FORECAST_API = "https://api.weatherapi.com/v1/forecast.json"
 AQI_HISTORY_API = "http://api.openweathermap.org/data/2.5/air_pollution/history"
 MAP_TILE_API = "https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga"
 
-WEATHER_API_KEY = "a78578373e714abbabf51022241205"
-OPEN_WEATHER_API_KEY = "b0011235ef5bece1b52b26b323021eb9"
+WEATHER_API_KEY = "YOUR_API_KEY"
+OPEN_WEATHER_API_KEY = "YOUR_API_KEY"
 
 ''' API DATA KEY PAIRS'''
 WEATHER_KEY_PAIR = {
@@ -36,12 +36,12 @@ DAY_BG_HEX = "#F29F05"
 NIGHT_BG_HEX = "#890189"
 AQI_BG_HEX = "#616161"
 
-class Current_Weather(tk.Tk):
+class WeatherApp(tk.Tk):
     def __init__(self):
-        ''' Initialize the Current_Weather class. '''
+        ''' Initialize the WeatherApp class. '''
         super().__init__()
 
-        self.geoloc = Nominatim(user_agent="Weather_App")
+        self.geoloc = Nominatim(user_agent="WeatherApp")
     
         self.main_frame = tk.Frame(self)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
@@ -226,7 +226,7 @@ class Current_Weather(tk.Tk):
         
 
 if __name__ == "__main__":
-    app = Current_Weather()
+    app = WeatherApp()
     app.title("Weather and Air Quality Analyzer")
     app.geometry("800x600")
     app.resizable(False, False)
