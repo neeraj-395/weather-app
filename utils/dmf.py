@@ -1,8 +1,8 @@
 import requests
 from tkinter import messagebox
-from typing import Optional, Dict
+from typing import Optional, Dict, Tuple
 
-def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict | None:
+def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict:
     """
     Fetches data from the specified API URL with optional query parameters.
 
@@ -11,7 +11,7 @@ def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict | 
     the parsed JSON data. If the content type is not JSON, it returns None. In case
     of a request exception, an error message is displayed and None is returned.
 
-    ## Example:
+    ### Example:
         >>> api_url = "https://api.example.com/data"
         >>> params = {"param1": "value1", "param2": "value2"}
         >>> data = fetch_data(api_url, params)
@@ -20,7 +20,7 @@ def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict | 
         >>> else:
         >>>     print("Failed to fetch data or data is not in JSON format.")
 
-    ## Note:
+    ### Note:
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """
@@ -31,8 +31,40 @@ def fetch_data(api_url: str, payload: Optional[Dict[str,str]] = None) -> Dict | 
 
         if type and "application/json" in type:
             return response.json()
-        else: return None
+        else: return {}
     
-    except requests.exceptions.RequestException as e:
-        messagebox.showerror("Error", f"Failed to fetch data: {e}")
-        return None
+    except requests.exceptions.HTTPError as e:
+        title, message = throw_error(e)
+        messagebox.showerror(title, message)
+        return {}
+
+    
+def throw_error(e: requests.exceptions.HTTPError) -> Tuple[str,str]:
+    """
+    Maps HTTP error codes to user-friendly error messages.
+
+    ### Parameters:
+    e (requests.exceptions.HTTPError): The HTTP error exception object.
+
+    ### Returns:
+    Tuple[str, str]: A tuple containing the error title and detailed error message.
+
+    ### Note:
+    This function documentation was generated with the assistance of ChatGPT, 
+    an AI language model developed by OpenAI.
+    """
+
+    if e.response.status_code == 400:
+        return ('Bad Request', 'The request was invalid.')
+    elif e.response.status_code == 401:
+        return ('Unauthorized','API key is invalid or missing.')
+    elif e.response.status_code == 403:
+        return ('Forbidden','Access is not allowed.')
+    elif e.response.status_code == 404:
+        return ('Not Found','The requested resource could not be found.')
+    elif e.response.status_code == 429:
+        return ('Too Many Requests','Rate limit exceeded.')
+    elif e.response.status_code == 500:
+        return ('Internal Server Error','An error occurred on the server.')
+    else:
+        return ('HTTP error occurred',f"{e}")

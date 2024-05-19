@@ -12,7 +12,7 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
     dictionary for label styling. It returns dictionaries containing the 
     created parameter and value labels.
 
-    ## Args:
+    ### Args:
     - parent (Any): The parent widget in which the labels will be created.
     - key_pairs (Dict[str, str]): A dictionary where the keys are destination 
       label texts and the values are source label texts.
@@ -20,12 +20,12 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
       for each label. The keys should correspond to destination label texts or 'FOR_ALL' 
       for default styling.
 
-    ## Returns:
+    ### Returns:
     Tuple[Dict, Dict]: Two dictionaries:
     - param_label: A dictionary of created parameter labels.
     - value_label: A dictionary of created value labels.
 
-    ## Example:
+    ### Example:
         >>> import tkinter as tk
         >>> root = tk.Tk()
         >>> key_pairs = {"Temperature": "temp", "Humidity": "hum"}
@@ -33,14 +33,14 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
         >>> param_labels, value_labels = create_labels(root, key_pairs, config)
         >>> root.mainloop()
 
-    ## Note:
+    ### Note:
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """
 
     param_label, value_label = {}, {}
 
-    for i, (dest_key, src_key) in enumerate(key_pairs.items()):
+    for i, dest_key in enumerate(key_pairs.keys()):
 
         label_config = config.get(dest_key, config.get('FOR_ALL',{}))
         param_label[dest_key] = tk.Label(parent, text=f"{dest_key}:", **label_config)
@@ -52,7 +52,6 @@ def create_labels(parent: Any, key_pairs: Dict[str, str], config: Dict[str, dict
     return param_label, value_label
 
 
-
 def create_card(file: Any, size: Optional[Tuple[int,int]] = None, corner_radius: Optional[int] = None):
     """
     Creates a card image with optional resizing and rounded corners.
@@ -60,12 +59,12 @@ def create_card(file: Any, size: Optional[Tuple[int,int]] = None, corner_radius:
     This function opens an image file and optionally resizes it and applies rounded corners. 
     The result is returned as an `ImageTk.PhotoImage` object, suitable for use in Tkinter applications.
 
-    Args:
+    ### Args:
     - file (Any): The file path or file-like object containing the image.
     - size (Optional[Tuple[int, int]]): An optional tuple specifying the desired size (width, height) to resize the image. If None, the image is not resized.
     - corner_radius (Optional[int]): An optional integer specifying the radius of the rounded corners. If None, the image corners are not rounded.
 
-    Example:
+    ### Example:
         >>> from PIL import ImageTk
         >>> import tkinter as tk
         >>> from your_module import create_card
@@ -77,7 +76,7 @@ def create_card(file: Any, size: Optional[Tuple[int,int]] = None, corner_radius:
         >>> label.pack()
         >>> root.mainloop()
 
-    Note:
+    ### Note:
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """

@@ -13,21 +13,21 @@ def temp_graph(dates: List[str], days: range, max_temp: List[float], min_temp: L
     over a range of days. It plots the minimum, maximum, and optionally the average 
     temperatures for each day.
 
-    ## Args:
+    ### Args:
         dates (List[str]): A list of date strings corresponding to the days.
         days (range): A range object representing the days.
         max_temp (List[float]): A list of maximum temperatures for each day.
         min_temp (List[float]): A list of minimum temperatures for each day.
         avg_temp (Optional[List[float]]): An optional list of average temperatures for each day.
 
-    ## Example:
+    ### Example:
         >>> dates = ["2023-05-01", "2023-05-02", "2023-05-03"]
         >>> days = range(1, 4)
         >>> max_temp = [25.0, 27.0, 22.0]
         >>> min_temp = [15.0, 17.0, 12.0]
         >>> temperature_graph(dates, days, max_temp, min_temp)
 
-    ## Note:    
+    ### Note:    
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """
@@ -40,7 +40,7 @@ def temp_graph(dates: List[str], days: range, max_temp: List[float], min_temp: L
     if avg_temp is None:
        avg_temp = [(max_temp[i] + min_temp[i]) / 2 for i in range(len(max_temp))]
     
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 6))
 
     norm = Normalize(MIN_TEMP_C, MAX_TEMP_C)
 
@@ -61,6 +61,7 @@ def temp_graph(dates: List[str], days: range, max_temp: List[float], min_temp: L
 
     plt.xticks(days)
     plt.legend()
+    plt.grid(True)
     plt.tight_layout()
     plt.show()
 
@@ -70,18 +71,18 @@ def aqi_graph(pm2_5: List[float], pm10: List[float], so2: List[float]):
     Generate a plot showing the concentration levels of PM2.5, PM10, and SO2 pollutants over time,
     along with the World Health Organization (WHO) recommended limits for each pollutant.
 
-    ## Parameters:
+    ### Parameters:
     - pm2_5 (List[float]): A list of PM2.5 concentration levels measured over time.
     - pm10 (List[float]): A list of PM10 concentration levels measured over time.
     - so2 (List[float]): A list of SO2 concentration levels measured over time.
 
-    ## Example:
+    ### Example:
         >>> pm2_5 = [20, 25, 30, 40, 35]
         >>> pm10 = [30, 35, 45, 50, 55]
         >>> so2 = [15, 18, 22, 19, 21]
         >>> aqi_graph(pm2_5, pm10, so2)
     
-    ## Note:    
+    ### Note:    
     This function documentation was generated with the assistance of ChatGPT, 
     an AI language model developed by OpenAI.
     """
@@ -90,7 +91,7 @@ def aqi_graph(pm2_5: List[float], pm10: List[float], so2: List[float]):
     WHO_LIMITS = {'PM2.5': 35, 'PM10': 50, 'SO2': 20}
     
     # Create the plot
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 6))
     
     # Plotting PM2.5 AQI as scatter plot
     plt.plot(np.arange(len(pm2_5)), pm2_5, label='PM2.5', color='blue')
@@ -101,16 +102,14 @@ def aqi_graph(pm2_5: List[float], pm10: List[float], so2: List[float]):
     plt.axhline(y=WHO_LIMITS['PM10'], color='orange', linestyle='-', label='WHO Recommended Limit (PM10)')
 
     # Plotting PM10 AQI as scatter plot
-    plt.plot(np.arange(len(so2)), so2, label='PM10', color='purple')
+    plt.plot(np.arange(len(so2)), so2, label='SO2', color='purple')
     plt.axhline(y=WHO_LIMITS['SO2'], color='black', linestyle='-', label='WHO Recommended Limit (SO2)')
 
     # Formatting the plot
     plt.title('PM2.5, PM10 And SO Concentration Levels')
     plt.ylabel('Concentration (µg/m³ or ppm)')
-    plt.xlabel('Month Ago')
+    plt.xlabel('One Month Ago (Hours)')
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
     plt.show()
-
-

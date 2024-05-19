@@ -2,5 +2,6 @@ geopy==2.4.1
 matplotlib==3.8.4
 numpy==1.26.4
 Pillow==10.3.0
+python_dateutil==2.9.0.post0
 Requests==2.31.0
 tkintermapview==1.29
